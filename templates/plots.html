@@ -29,5 +29,52 @@
           yaxis: { title: 'Temperature' }
       });
     </script>
+
+    <form method="post">
+      <label
+        >jmax:
+        <input
+          type="number"
+          name="jmax"
+          value="{{ request.form.jmax or default_input.jmax }}"
+      /></label>
+      <label
+        >nmax:
+        <input
+          type="number"
+          name="nmax"
+          value="{{ request.form.nmax or default_input.nmax }}"
+      /></label>
+      <label
+        >alpha:
+        <input
+          type="text"
+          name="alpha"
+          value="{{ request.form.alpha or default_input.alpha }}"
+      /></label>
+      <label
+        >s:
+        <input
+          type="text"
+          name="s"
+          value="{{ request.form.s or default_input.s }}"
+      /></label>
+      <label
+        >timax:
+        <input
+          type="text"
+          name="timax"
+          value="{{ request.form.timax or default_input.timax }}"
+      /></label>
+      <label
+        >timesteps (comma separated):
+        <input
+          type="text"
+          name="timesteps"
+          value="{{ request.form.timesteps or default_input.timesteps }}"
+      /></label>
+      <button type="submit">Run Simulation</button>
+    </form>
+    <br />
   </body>
 </html>
