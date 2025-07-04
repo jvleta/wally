@@ -1,4 +1,5 @@
-# TODO: create a basic Flask app that just displays Hello World
+import os
+
 from flask import Flask, render_template
 from fletcher import DIFF, DiffInput
 
@@ -10,5 +11,5 @@ def hello_world():
     results = DIFF(diff_input)
     return render_template('plots.html', results=results)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
