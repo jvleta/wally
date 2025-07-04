@@ -1,8 +1,5 @@
 import numpy as np
 from dataclasses import dataclass
-import matplotlib.pyplot as plt
-# Note: The code below is a numerical simulation of heat diffusion in a rod.
-# todo: modify function so that it DiffInput contains a list of timesteps to plot the results. For those timesteps, we should call plt.plot() to plot the temperature distribution.
 
 @dataclass
 class DiffInput:
@@ -11,60 +8,48 @@ class DiffInput:
     alpha: float
     s: float
     timax: float
-    timesteps: list[float] = None  # Optional list of timesteps to plot
+    timesteps: list[float]
 
+class DiffusionSolver:
+    def __init__(self, params: DiffInput):
+        self.params = params
+        self.dx = 1.0 / (params.jmax - 1)
+        self.dt = self.dx * self.dx * params.s / params.alpha
+        self.TD = np.zeros(params.jmax)
+        self.current_time = 0.0
+        self._set_initial_conditions()
+
+    def _set_initial_conditions(self):
+        self.TD[0] = 50.0
+        self.TD[self.params.jmax - 1] = 50.0
+
+    def _apply_boundary_conditions(self):
+        if self.current_time > 0.0:
+            self.TD[0] = 100.0
+            self.TD[self.params.jmax - 1] = 100.0
+        else:
+            self.TD[0] = 50.0
+            self.TD[self.params.jmax - 1] = 50.0
+
+    def step(self):
+        TD_old = self.TD.copy()
+        for j in range(1, self.params.jmax - 1):
+            self.TD[j] = (
+                (1.0 - 2.0 * self.params.s) * TD_old[j]
+                + self.params.s * (TD_old[j - 1] + TD_old[j + 1])
+            )
+
+    def run(self):
+        results = {t: None for t in self.params.timesteps}
+        while self.current_time < self.params.timax:
+            self._apply_boundary_conditions()
+            self.step()
+            for t in self.params.timesteps:
+                if np.abs(t - self.current_time) < 1e-5:
+                    results[t] = self.TD.copy().tolist()
+            self.current_time += self.dt
+        return results
 
 def DIFF(input: DiffInput):
-    # TODO: Modify this function to return a dictionary with results for the specified timesteps
-    results = {time_step: None for time_step in input.timesteps}
-    """
-    Numerical simulation using only the dimensional temperature array (TD).
-    """
-    jmax = input.jmax
-    alpha = input.alpha
-    s = input.s
-    timax = input.timax
-
-    dx = 1.0 / float(jmax - 1)  # spatial step size
-    dt = dx * dx * s / alpha
-
-    print(f"Calculated dx={dx}, dt={dt}")
-
-    TD = np.zeros(jmax)  # dimensional temperature
-    DUM = np.zeros(jmax)  # dummy array for calculations
-
-    current_time = 0.0
-
-    # Set initial boundary conditions
-    TD[0] = 50.0  # 100 * 0.5
-    TD[jmax - 1] = 50.0
-
-    print(f"Initial boundary conditions set: TD[0]={TD[0]}, TD[{jmax-1}]={TD[jmax-1]}")
-
-    # Main simulation loop
-    while current_time < timax:
-        if current_time > 0.0:
-            TD[0] = 100.0  # 100 * 1.0
-            TD[jmax - 1] = 100.0
-        else:
-            TD[0] = 50.0  # 100 * 0.5
-            TD[jmax - 1] = 50.0
-
-        # Update TD in-place using a copy to avoid overwriting values needed for computation
-        TD_old = TD.copy()
-        for j in range(1, jmax - 1):
-            TD[j] = (1.0 - 2.0 * s) * TD_old[j] + s * (TD_old[j - 1] + TD_old[j + 1])
-        # Optional: Plot the temperature distribution at specified timesteps
-        print (f"At time {current_time:.2f}s {input.timesteps}")
-        for time_step in input.timesteps:
-            if np.abs(time_step - current_time) < 1e-5:
-                results[time_step] = TD.copy().tolist()  # Store the temperature distribution at this timestep
-        current_time += dt
-
-    return results
-
-
-if __name__ == "__main__":
-    # Example usage
-    diff_input = DiffInput(jmax=11, nmax=10, alpha=0.1e-4, s=0.5, timax=3500.0, timesteps=[0.0, 1500.0, 3000.0])
-    DIFF(diff_input)
+    solver = DiffusionSolver(input)
+    return solver.run()
