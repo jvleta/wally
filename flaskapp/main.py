@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request
-from fletcher import DIFF, DiffInput
+from wally.fletcher import DIFF, DiffInput
 
 app = Flask(__name__)
 
