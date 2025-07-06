@@ -10,29 +10,30 @@ app = Flask(__name__)
 def plot():
     # Default values
     default_input = {
-        "jmax": 11,
-        "nmax": 10,
+        "num_gridpoints": 11,
         "alpha": 0.00001,
         "s": 0.5,
-        "timax": 3500.0,
-        "timesteps": "0.0,1500.0,3000.0",
+        "max_time": 3500.0,
+        "output_timesteps": "0.0,1500.0,3000.0",
     }
     if request.method == "POST":
-        jmax = int(request.form["jmax"])
-        nmax = int(request.form["nmax"])
+        num_gridpoints = int(request.form["num_gridpoints"])
         alpha = float(request.form["alpha"])
         s = float(request.form["s"])
-        timax = float(request.form["timax"])
-        timesteps = [float(x) for x in request.form["timesteps"].split(",")]
+        max_time = float(request.form["max_time"])
+        output_timesteps = [
+            float(x) for x in request.form["output_timesteps"].split(",")
+        ]
     else:
-        jmax = default_input["jmax"]
-        nmax = default_input["nmax"]
+        num_gridpoints = default_input["num_gridpoints"]
         alpha = default_input["alpha"]
         s = default_input["s"]
-        timax = default_input["timax"]
-        timesteps = [float(x) for x in default_input["timesteps"].split(",")]
+        max_time = default_input["max_time"]
+        output_timesteps = [
+            float(x) for x in default_input["output_timesteps"].split(",")
+        ]
 
-    diff_input = DiffInput(jmax, nmax, alpha, s, timax, timesteps)
+    diff_input = DiffInput(num_gridpoints, alpha, s, max_time, output_timesteps)
     results = DIFF(diff_input)
     return render_template("plots.html", results=results, default_input=default_input)
 

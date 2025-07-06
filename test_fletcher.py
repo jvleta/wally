@@ -5,48 +5,45 @@ from fletcher import DiffInput, DiffusionSolver, DIFF
 class TestDiffusionSolver(unittest.TestCase):
     def test_initial_conditions(self):
         params = DiffInput(
-            jmax=5,
-            nmax=4,
+            num_gridpoints=5,
             alpha=0.1e-4,
             s=0.5,
-            timax=10.0,
-            timesteps=[0.0],
+            max_time=10.0,
+            output_timesteps=[0.0],
         )
         solver = DiffusionSolver(params)
-        self.assertEqual(solver.TD[0], 50.0)
-        self.assertEqual(solver.TD[-1], 50.0)
+        self.assertEqual(solver.T[0], 50.0)
+        self.assertEqual(solver.T[-1], 50.0)
 
     def test_step(self):
         params = DiffInput(
-            jmax=5,
-            nmax=4,
+            num_gridpoints=5,
             alpha=0.1e-4,
             s=0.5,
-            timax=10.0,
-            timesteps=[0.0],
+            max_time=10.0,
+            output_timesteps=[0.0],
         )
         solver = DiffusionSolver(params)
         solver._apply_boundary_conditions()
         solver.step()
-        self.assertEqual(len(solver.TD), params.jmax)
+        self.assertEqual(len(solver.T), params.num_gridpoints)
 
     def test_diff_output(self):
         diff_input = DiffInput(
-            jmax=11,
-            nmax=10,
+            num_gridpoints=11,
             alpha=0.1e-4,
             s=0.5,
-            timax=3500.0,
-            timesteps=[0.0, 1500.0, 3000.0],
+            max_time=3500.0,
+            output_timesteps=[0.0, 1500.0, 3000.0],
         )
         results = DIFF(diff_input)
         print(f"Results: {results}")
         # Check that results is a dict with the right keys
         self.assertIsInstance(results, dict)
-        for t in diff_input.timesteps:
+        for t in diff_input.output_timesteps:
             self.assertIn(t, results)
             self.assertIsInstance(results[t], list)
-            self.assertEqual(len(results[t]), diff_input.jmax)
+            self.assertEqual(len(results[t]), diff_input.num_gridpoints)
 
 
 if __name__ == "__main__":

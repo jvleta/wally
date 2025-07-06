@@ -16,12 +16,13 @@
     <script>
       // Pass results from Flask to JavaScript
       const results = {{ results| tojson }};
+      console.log(results);
       const timesteps = Object.keys(results);
       const traces = [];
 
       for (const t of timesteps) {
           traces.push({
-              x: Array.from({ length: results[t].length }, (_, i) => i),
+              x: Array.from({ length: results[t]?.length }, (_, i) => i),
               y: results[t],
               mode: 'lines',
               name: `t = ${t}s`
@@ -37,18 +38,11 @@
 
     <form method="post">
       <label
-        >jmax:
+        >num_gridpoints:
         <input
           type="number"
-          name="jmax"
-          value="{{ request.form.jmax or default_input.jmax }}"
-      /></label>
-      <label
-        >nmax:
-        <input
-          type="number"
-          name="nmax"
-          value="{{ request.form.nmax or default_input.nmax }}"
+          name="num_gridpoints"
+          value="{{ request.form.num_gridpoints or default_input.num_gridpoints }}"
       /></label>
       <label
         >alpha:
@@ -65,18 +59,18 @@
           value="{{ request.form.s or default_input.s }}"
       /></label>
       <label
-        >timax:
+        >max_time:
         <input
           type="text"
-          name="timax"
-          value="{{ request.form.timax or default_input.timax }}"
+          name="max_time"
+          value="{{ request.form.max_time or default_input.max_time }}"
       /></label>
       <label
         >timesteps (comma separated):
         <input
           type="text"
-          name="timesteps"
-          value="{{ request.form.timesteps or default_input.timesteps }}"
+          name="output_timesteps"
+          value="{{ request.form.output_timesteps or default_input.output_timesteps }}"
       /></label>
       <button type="submit">Run Simulation</button>
     </form>
