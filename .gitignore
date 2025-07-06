@@ -1,2 +1,6 @@
 venv/
 __pycache__/
+wally.egg-info/
+*.pyc
+*.pyo
+*.pyd
