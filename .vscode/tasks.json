@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build wally (pip install -e .)",
+      "type": "shell",
+      "command": "pip install -e .",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Run Flask app",
+      "type": "shell",
+      "command": "source venv/bin/activate && FLASK_APP=flaskapp/main.py flask run",
+      "group": "test",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Deploy to Cloud Run",
+      "type": "shell",
+      "command": "gcloud run deploy wally-app --source . --region=us-central1 --platform=managed --allow-unauthenticated --port=8080",
+      "group": "test",
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}
