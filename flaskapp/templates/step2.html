@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Step 2: Output Timesteps</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <h2>Step 2: Output Timesteps</h2>
+    <form method="post">
+      <label>
+        timesteps (comma separated):
+        <input
+          type="text"
+          name="output_timesteps"
+          value="{{ session.get('output_timesteps', default_timesteps) }}"
+        /> </label
+      ><br />
+      <button type="submit">Show Results</button>
+    </form>
+  </body>
+</html>

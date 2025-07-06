@@ -21,18 +21,18 @@
       const traces = [];
 
       for (const t of timesteps) {
-          traces.push({
-              x: Array.from({ length: results[t]?.length }, (_, i) => i),
-              y: results[t],
-              mode: 'lines',
-              name: `t = ${t}s`
-          });
+        traces.push({
+          x: Array.from({ length: results[t]?.length }, (_, i) => i),
+          y: results[t],
+          mode: 'lines',
+          name: `t = ${t}s`
+        });
       }
 
       Plotly.newPlot('plot', traces, {
-          title: 'Temperature Distribution at Selected Timesteps',
-          xaxis: { title: 'Position' },
-          yaxis: { title: 'Temperature' }
+        title: 'Temperature Distribution at Selected Timesteps',
+        xaxis: { title: 'Position' },
+        yaxis: { title: 'Temperature' }
       });
     </script>
 

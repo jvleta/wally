@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Step 1: Simulation Parameters</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <h2>Step 1: Simulation Parameters</h2>
+    <form method="post">
+      <label>
+        num_gridpoints:
+        <input
+          type="number"
+          name="num_gridpoints"
+          value="{{ session.get('num_gridpoints', default_input.num_gridpoints) }}"
+        /> </label
+      ><br />
+      <label>
+        alpha:
+        <input
+          type="text"
+          name="alpha"
+          value="{{ session.get('alpha', default_input.alpha) }}"
+        /> </label
+      ><br />
+      <label>
+        s:
+        <input
+          type="text"
+          name="s"
+          value="{{ session.get('s', default_input.s) }}"
+        /> </label
+      ><br />
+      <label>
+        max_time:
+        <input
+          type="text"
+          name="max_time"
+          value="{{ session.get('max_time', default_input.max_time) }}"
+        /> </label
+      ><br />
+      <button type="submit">Next</button>
+    </form>
+  </body>
+</html>
